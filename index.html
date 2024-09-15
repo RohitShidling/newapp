@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Colorful Bet - Light Blue Theme</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa; /* Light blue background */
+            color: #004d61; /* Darker text color to complement the light blue */
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1, h2 {
+            color: #006064; /* Dark cyan-blue for headings */
+        }
+
+        .token {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 10px;
+            position: relative;
+            color: white;
+            font-weight: bold;
+            text-align: center;
+            line-height: 60px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Token colors */
+        .red { background-color: #ff5252; } /* Lighter red */
+        .green { background-color: #4caf50; } /* Fresh green */
+        .blue { background-color: #29b6f6; } /* Sky blue */
+        .yellow { background-color: #ffee58; color: black; } /* Bright yellow */
+        .violet { background-color: #ab47bc; } /* Vibrant violet */
+        .orange { background-color: #ff7043; } /* Soft orange */
+        .cyan { background-color: #00bcd4; } /* Cyan */
+        
+        /* Form styling */
+        form {
+            background-color: #ffffff;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+            display: inline-block;
+        }
+
+        select, input[type="submit"] {
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #00bcd4;
+        }
+
+        input[type="submit"] {
+            background-color: #00bcd4;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #008c9e; /* Darker blue on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1>Colorful Bet</h1>
+    <div>
+        <h2>Select your bets:</h2>
+        <div>
+            <div class="token red" onclick="showBetOptions('Red')">Red</div>
+            <div class="token green" onclick="showBetOptions('Green')">Green</div>
+            <div class="token violet" onclick="showBetOptions('Violet')">Violet</div>
+        </div>
+        <div>
+            <div class="token red" onclick="showBetOptions('0')">0</div>
+            <div class="token violet" onclick="showBetOptions('1')">1</div>
+            <div class="token green" onclick="showBetOptions('2')">2</div>
+            <div class="token blue" onclick="showBetOptions('3')">3</div>
+            <div class="token violet" onclick="showBetOptions('4')">4</div>
+            <div class="token green" onclick="showBetOptions('5')">5</div>
+            <div class="token orange" onclick="showBetOptions('6')">6</div>
+            <div class="token violet" onclick="showBetOptions('7')">7</div>
+            <div class="token green" onclick="showBetOptions('8')">8</div>
+            <div class="token blue" onclick="showBetOptions('9')">9</div>
+        </div>
+        <div>
+            <div class="token blue" onclick="showBetOptions('Big')">Big</div>
+            <div class="token yellow" onclick="showBetOptions('Small')">Small</div>
+        </div>
+    </div>
+    <div>
+        <h2>Betting Options:</h2>
+        <form id="betForm" style="display:none;" onsubmit="placeBet(event)">
+            <p id="selectedBet"></p>
+            <label for="amount">Bet Amount:</label>
+            <select id="amount">
+                <option value="1">1</option>
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="500">500</option>
+                <option value="1000">1000</option>
+            </select><br><br>
+            <input type="submit" value="Place Bet">
+        </form>
+    </div>
+    
+    <script>
+        let selectedBet = '';
+
+        function showBetOptions(option) {
+            selectedBet = option;
+            document.getElementById('betForm').style.display = 'block';
+            document.getElementById('selectedBet').innerHTML = 'Selected Bet: ' + option;
+        }
+
+        function placeBet(event) {
+            event.preventDefault();  // Prevent form from submitting normally
+            const amount = document.getElementById('amount').value;
+
+            // Example of user data (replace with actual user data)
+            const userId = "USER123"; // Retrieve dynamically from your session or user authentication
+
+            // Example API call to place the bet
+            fetch('/api/place-bet', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    bet: selectedBet,
+                    amount: amount,
+                    userId: userId
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Bet placed successfully!");
+                } else {
+                    alert("Error placing bet: " + data.message);
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred while placing your bet.");
+            });
+        }
+    </script>
+</body>
+</html>
